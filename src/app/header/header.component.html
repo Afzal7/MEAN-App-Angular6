@@ -1,5 +1,7 @@
 <mat-toolbar color="primary">
-	<a routerLink='/'>Posts</a>
-
-	<a routerLink='/create'>Create</a>
+	<button mat-button routerLink='/'><h3>Posts</h3></button>
+	<div class="spacer"></div>
+	<button mat-button routerLink='/create' routerLinkActive="mat-accent">New Post</button>
+	<button mat-button routerLink='/login' routerLinkActive="mat-accent">Login</button>
+	<button mat-button routerLink='/signup' routerLinkActive="mat-accent">Signup</button>
 </mat-toolbar>

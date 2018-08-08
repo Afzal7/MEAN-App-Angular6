@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Post } from "../post.model";
 import { PostsService } from "../posts.service";
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
 	selector: "app-post-list",
@@ -16,9 +17,11 @@ export class PostListComponent implements OnInit, OnDestroy {
 	//   { title: "Third Post", content: "This is the third post's content" }
 	// ];
 	posts: Post[] = [];
+	userIsAuthenticated = false;
 	private postsSub: Subscription;
+	private authServiceSubs: Subscription;
 
-	constructor(public postsService: PostsService) {}
+	constructor(public postsService: PostsService, private authService: AuthService) {}
 
 	ngOnInit() {
 		this.postsService.getPosts();
@@ -26,6 +29,8 @@ export class PostListComponent implements OnInit, OnDestroy {
 			.subscribe((posts: Post[]) => {
 				this.posts = posts;
 			});
+
+		this.subscribeUserAuth();
 	}
 
 	onDelete(postId: string){
@@ -34,5 +39,16 @@ export class PostListComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.postsSub.unsubscribe();
+		this.authServiceSubs.unsubscribe();
+	}
+
+	subscribeUserAuth(){
+		this.userIsAuthenticated = this.authService.getIsAuth();
+		console.log(this.userIsAuthenticated);
+		this.authServiceSubs = this.authService.getAuthStatusListner()
+			.subscribe(isAuthenticated => {
+				console.log(isAuthenticated);
+				this.userIsAuthenticated = isAuthenticated;
+			});
 	}
 }
